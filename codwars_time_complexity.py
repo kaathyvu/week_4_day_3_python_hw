@@ -5,13 +5,13 @@
 def get_count(sentence):
     vowels = ['a', 'e', 'i', 'o', 'u']
     count = 0
-    for letter in sentence:
-        for vowel in vowels:
-            if letter == vowel:
-                count+=1
+    for letter in sentence: # linear
+        for vowel in vowels: # linear -- nested linear = quadratic
+            if letter == vowel: # constant
+                count+=1 # constant
     return count
 
-# New Solution - Linear? Because we changed the list to a dict and accessing a dict is linear time
+# New Solution - Linear? Because we changed the list to a dict and accessing a dict is constant time
 # Runtime = 478ms
 def get_count(sentence):
     vowels = {
@@ -22,10 +22,12 @@ def get_count(sentence):
         "u":""
     }
     count = 0
-    for letter in sentence:
-        if letter in vowels:
-            count+=1
+    for letter in sentence: # linear time
+        if letter in vowels: # constant time
+            count+=1 # constant time
     return count
+
+
 
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -37,9 +39,9 @@ def get_count(sentence):
 def disemvowel(string_):
     new_string = ""
     vowels = ["a", "e", "i", "o", "u"]
-    for letter in string_:
-        if letter.lower() not in vowels:
-                new_string += letter
+    for letter in string_: # linear time
+        if letter.lower() not in vowels: # linear time -- nested linear = quadratic
+                new_string += letter # constant
     return new_string
 
 # New solution - Linear? Again because we changed the list to a dict and accessing a dict is linear time
@@ -58,27 +60,37 @@ def disemvowel(string_):
         "U":"",
     }
     new_string = ""
-    for letter in string_:
-        if letter not in vowels:
-            new_string += letter
+    for letter in string_: # linear time
+        if letter not in vowels: # constant time
+            new_string += letter # constant time
     return new_string
+
+
 
 
 # /////////////////////////////////////////////////////////////////////////////
 
-# Codewars Problem #3 - Array.diff
-# https://www.codewars.com/kata/523f5d21c841566fde000009
-# Old solution - Quadratic? Because we have a while loop nested in a for loop?
-# Runtime = 683ms
-def array_diff(a, b):
-    for num in b:
-        while num in a:
-            a.remove(num)
-    return a
+# Codewars Problem #3 - Counting Duplicates
+# https://www.codewars.com/kata/54bf1c2cd5b56cc47f0007a1
+# Old solution - Quadratic time
+# Runtime = 718ms
+def duplicate_count(text):
+    lower_text = text.lower()
+    new_list = [letter for letter in lower_text if lower_text.count(letter) > 1]
+    # for loop = linear time
+    # .count() = linear time but nested within for loop = quadratic time?
+    return len(set(new_list)) # linear time
 
-# New solution - Quadratic still I think - I couldn't figure out a way to make this
-#     linear but I did try to decrease the time by changing the list to a set to rule out any duplicates. Not sure if it did much though
-# Runtime = 511ms
-def array_diff(a, b):
-    c = [num for num in a if num not in set(b)]
-    return c
+# New solution - Linear Time
+# Runtime = 556ms
+def duplicate_count(text):
+    single_dict = {}
+    dupe_dict = {}
+    lower_text = text.lower() # linear time
+    for letter in lower_text: # linear time
+        if letter not in single_dict: # constant time
+            single_dict[letter] = 1 # constant time
+        else:
+            dupe_dict[letter] = single_dict[letter] + 1 # constant time
+    return len(dupe_dict) # linear time
+        
